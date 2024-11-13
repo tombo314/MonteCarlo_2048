@@ -121,7 +121,7 @@ public:
         if (dir=='F'){
             rep(i, 0, g_size){
 
-                // キャンディーを保持する
+                // 0以外を保持する
                 vector<int> tmp;
                 rep(j, 0, g_size){
                     if (grid[j][i]!=0){
@@ -151,7 +151,7 @@ public:
         else if (dir=='B'){
             rep(i, 0, g_size){
 
-                // キャンディーを保持する
+                // 0以外を保持する
                 vector<int> tmp;
                 rep(j, 0, g_size){
                     if (grid[j][i]!=0){
@@ -181,7 +181,7 @@ public:
         else if (dir=='L'){
             rep(i, 0, g_size){
 
-                // キャンディーを保持する
+                // 0以外を保持する
                 vector<int> tmp;
                 rep(j, 0, g_size){
                     if (grid[i][j]!=0){
@@ -211,7 +211,7 @@ public:
         else if (dir=='R'){
             rep(i, 0, g_size){
 
-                // キャンディーを保持する
+                // 0以外を保持する
                 vector<int> tmp;
                 rep(j, 0, g_size){
                     if (grid[i][j]!=0){
@@ -242,12 +242,12 @@ public:
     // ルールベースで盤面を評価する
     int evaluate(){
         int score = 0;
-        // // debug
-        // for (int i=0; i<g_size; i++){
-        //     for (int j=0; j<g_size; j++){
-        //         score += pow(grid[i][j], 2);
-        //     }
-        // }
+        // debug
+        for (int i=0; i<g_size; i++){
+            for (int j=0; j<g_size; j++){
+                score += pow(grid[i][j], 2);
+            }
+        }
         return score;
     }
 
@@ -582,5 +582,11 @@ int main(){
 /*
 
 スコア計算をルールベースにする
+
+0 0 0 0
+0 0 0 0
+2 2 0 0
+0 0 0 0
+1 2
 
 */
