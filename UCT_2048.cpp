@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-#define rep(i, a, b) for (ll i=a; i<b; i++)
-#define rrep(i, a, b) for (ll i=a; i>b; i--)
+#define rep(i, a, b) for (int i=a; i<b; i++)
+#define rrep(i, a, b) for (int i=a; i>b; i--)
 #define now() chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count()
 
 template <typename T, typename U>
@@ -36,8 +36,8 @@ const int g_size = 4;
 const int turn_num = 10000;
 const string dirs = "FBLR";
 
-pair<ll, ll> dim1to2(vector<vector<ll>> &grid, ll n){
-    ll idx = 0;
+pair<int, int> dim1to2(vector<vector<int>> &grid, int n){
+    int idx = 0;
     rep(i, 0, g_size){
         rep(j, 0, g_size){
             if (grid[i][j]==0){
@@ -54,27 +54,27 @@ pair<ll, ll> dim1to2(vector<vector<ll>> &grid, ll n){
 
 // turn_: 現在のターン数
 class Node {
-    ll turn;
-    vector<vector<ll>> grid;
+    int turn;
+    vector<vector<int>> grid;
 public:
-    Node(ll turn_, vector<vector<ll>> grid_){
+    Node(int turn_, vector<vector<int>> grid_){
         turn = turn_;
         grid = grid_;
     }
 
-    vector<vector<ll>> get_grid(){
+    vector<vector<int>> get_grid(){
         return grid;
     }
 
     // n: 1-dim coord
-    void input(ll idx, ll val){
-        ll i, j;
+    void input(int idx, int val){
+        int i, j;
         tie(i, j) = dim1to2(grid, idx);
         grid[i][j] = val;
         turn++;
     }
 
-    vector<ll> merge_num(vector<ll> nums, char dir){
+    vector<int> merge_num(vector<int> nums, char dir){
         int n = nums.size();
 
         if (dir=='F'){
@@ -122,7 +122,7 @@ public:
             rep(i, 0, g_size){
 
                 // キャンディーを保持する
-                vector<ll> tmp;
+                vector<int> tmp;
                 rep(j, 0, g_size){
                     if (grid[j][i]!=0){
                         tmp.emplace_back(grid[j][i]);
@@ -134,7 +134,7 @@ public:
                 tmp = merge_num(tmp, dir);
 
                 // 0を除外する
-                vector<ll> not_0;
+                vector<int> not_0;
                 for (auto x: tmp){
                     if (x!=0){
                         not_0.emplace_back(x);
@@ -152,7 +152,7 @@ public:
             rep(i, 0, g_size){
 
                 // キャンディーを保持する
-                vector<ll> tmp;
+                vector<int> tmp;
                 rep(j, 0, g_size){
                     if (grid[j][i]!=0){
                         tmp.emplace_back(grid[j][i]);
@@ -164,7 +164,7 @@ public:
                 tmp = merge_num(tmp, dir);
                 
                 // 0を除外する
-                vector<ll> not_0;
+                vector<int> not_0;
                 for (auto x: tmp){
                     if (x!=0){
                         not_0.emplace_back(x);
@@ -182,7 +182,7 @@ public:
             rep(i, 0, g_size){
 
                 // キャンディーを保持する
-                vector<ll> tmp;
+                vector<int> tmp;
                 rep(j, 0, g_size){
                     if (grid[i][j]!=0){
                         tmp.emplace_back(grid[i][j]);
@@ -194,7 +194,7 @@ public:
                 tmp = merge_num(tmp, dir);
                 
                 // 0を除外する
-                vector<ll> not_0;
+                vector<int> not_0;
                 for (auto x: tmp){
                     if (x!=0){
                         not_0.emplace_back(x);
@@ -212,7 +212,7 @@ public:
             rep(i, 0, g_size){
 
                 // キャンディーを保持する
-                vector<ll> tmp;
+                vector<int> tmp;
                 rep(j, 0, g_size){
                     if (grid[i][j]!=0){
                         tmp.emplace_back(grid[i][j]);
@@ -224,7 +224,7 @@ public:
                 tmp = merge_num(tmp, dir);
                 
                 // 0を除外する
-                vector<ll> not_0;
+                vector<int> not_0;
                 for (auto x: tmp){
                     if (x!=0){
                         not_0.emplace_back(x);
@@ -240,13 +240,14 @@ public:
     }
 
     // ルールベースで盤面を評価する
-    ll evaluate(){
-        ll score = 0;
-        for (int i=0; i<g_size; i++){
-            for (int j=0; j<g_size; j++){
-                score += pow(grid[i][j], 2);
-            }
-        }
+    int evaluate(){
+        int score = 0;
+        // // debug
+        // for (int i=0; i<g_size; i++){
+        //     for (int j=0; j<g_size; j++){
+        //         score += pow(grid[i][j], 2);
+        //     }
+        // }
         return score;
     }
 
@@ -320,7 +321,7 @@ public:
         return ret;
     }
 
-    ll get_turn(){
+    int get_turn(){
         return turn;
     }
 
@@ -330,7 +331,7 @@ public:
 
         rep(t, turn, turn_num){
             // 空き座標を数える
-            ll cnt_free = 0;
+            int cnt_free = 0;
             rep(i, 0, g_size){
                 rep(j, 0, g_size){
                     if (grid[i][j]==0){
@@ -343,7 +344,7 @@ public:
             if (cnt_free==0){
                 break;
             }
-            ll next_coord = rand(1, cnt_free+1);
+            int next_coord = rand(1, cnt_free+1);
 
             // 盤面にキャンディーを配置する
             vector<int> candy{2, 2, 2, 4};
@@ -388,14 +389,12 @@ public:
     }
 };
 
-double get_ucb1(ll score, ll trial_num, ll trial_num_all){
+double get_ucb1(int score, int trial_num, int trial_num_all){
     const double c = 3000'0000;
     return (double)score/trial_num+c*sqrt(2*log(trial_num_all)/trial_num);
 }
 
-ll debug_simulation_cnt = 0;
-
-bool is_valid_dir(vector<vector<ll>> &grid, char dir){
+bool is_valid_dir(vector<vector<int>> &grid, char dir){
     bool ok = false;
 
     if (dir=='F'){
@@ -452,7 +451,7 @@ int main(){
     ios::sync_with_stdio(false);
 
     // 初期化
-    vector grid_init(g_size, vector(g_size, 0LL));
+    vector grid_init(g_size, vector(g_size, 0));
     cout << "input the grid except any one square:" << endl;
 
     for (int i=0; i<g_size; i++){
@@ -466,16 +465,17 @@ int main(){
 
     cout << "input the excepted square and start." << endl;
 
+    // 自動で乱択して入力する
     const bool auto_mode = false;
 
     // ターン開始
     rep(turn, 0, turn_num){
 
-        ll coord, val;
+        int coord, val;
 
         if (auto_mode){
             // debug
-            vector<vector<ll>> grid_debug = node.get_grid();
+            vector<vector<int>> grid_debug = node.get_grid();
             int cnt_free = 0;
             for (int i=0; i<g_size; i++){
                 for (int j=0; j<g_size; j++){
@@ -495,7 +495,7 @@ int main(){
         // キャンディーを置く
         node.input(coord, val);
 
-        vector<vector<ll>> grid_tmp = node.get_grid();
+        vector<vector<int>> grid_tmp = node.get_grid();
         string dirs_tmp;
         for (auto x: dirs){
             if (is_valid_dir(grid_tmp, x)){
@@ -504,15 +504,15 @@ int main(){
         }
 
         // ノードを展開する
-        ll cand_num = dirs_tmp.size();
+        int cand_num = dirs_tmp.size();
         vector<Node> nodes(cand_num, Node{-1, grid_tmp});
         rep(i, 0, cand_num){
             nodes[i] = node;
             nodes[i].tilt(dirs_tmp[i]);
         }
 
-        vector<ll> scores(cand_num);
-        vector<ll> trial_nums(cand_num);
+        vector<int> scores(cand_num);
+        vector<int> trial_nums(cand_num);
         
         // 各ノード1回ずつシミュレーションする
         rep(i, 0, cand_num){
@@ -522,20 +522,18 @@ int main(){
             trial_nums[i]++;
         }
 
-        const ll simulation_num = 2000;
-        const ll simulation_num_border = 500;
+        const int simulation_num = 2000;
+        const int simulation_num_border = 500;
 
         // UCB1に基づいてノードを決定して、
         // モンテカルロシミュレーションを行う
         rep(simulation_cnt, 0, simulation_num){
 
-            debug_simulation_cnt++;
-
             // ucb1が最大のノードを選ぶ
-            ll mx_score = 0;
-            ll mx_cand;
+            int mx_score = 0;
+            int mx_cand;
             rep(i, 0, cand_num){
-                double ucb1 = get_ucb1(scores[i], trial_nums[i], max(1LL, simulation_cnt));
+                double ucb1 = get_ucb1(scores[i], trial_nums[i], max(1, simulation_cnt));
                 if (chmax(mx_score, ucb1)){
                     mx_cand = i;
                 }
@@ -558,8 +556,8 @@ int main(){
         }
 
         // ucb1が最大の手を選ぶ
-        ll mx_score = 0;
-        ll mx_cand;
+        int mx_score = 0;
+        int mx_cand;
         rep(i, 0, cand_num){
             double ucb1 = scores[i]/trial_nums[i];
             if (chmax(mx_score, ucb1)){
@@ -579,12 +577,10 @@ int main(){
         // 盤面を出力する
         node.show_grid();
     }
-
-    cerr << "loop_num: " << debug_simulation_cnt << endl;
 }
 
 /*
 
-操作をキャンセルできるようにする
+スコア計算をルールベースにする
 
 */
