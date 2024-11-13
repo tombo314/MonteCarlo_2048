@@ -3,16 +3,7 @@ using namespace std;
 typedef long long ll;
 #define rep(i, a, b) for (ll i=a; i<b; i++)
 #define rrep(i, a, b) for (ll i=a; i>b; i--)
-#define vrep(x, v) for (auto x: v)
-#define mrep(x, y, v) for (auto [x, y]: v)
-#define srt(v) sort(v.begin(), v.end())
-#define rev(v) reverse(v.begin(), v.end())
-#define vmax(v) *max_element(v.begin(), v.end())
-#define vmin(v) *min_element(v.begin(), v.end())
-#define vsum(v, T) accumulate(v.begin(), v.end(), (T)0)
 #define now() chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count()
-#define choice(in, out, n) sample(in.begin(), in.end(), back_inserter(out), n, mt)
-#define inf (ll)1e18
 
 template <typename T, typename U>
 bool chmax(T &a, U b){
@@ -41,8 +32,8 @@ ll rand(ll a, ll b) {
 
 // grid coordは1-indexed
 
-const ll g_size = 4;
-const ll turn_num = 10000;
+const int g_size = 4;
+const int turn_num = 10000;
 const string dirs = "FBLR";
 
 pair<ll, ll> dim1to2(vector<vector<ll>> &grid, ll n){
