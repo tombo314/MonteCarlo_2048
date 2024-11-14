@@ -14,15 +14,6 @@ bool chmax(T &a, U b){
     return false;
 }
 
-template <typename T, typename U>
-bool chmin(T &a, U b){
-    if (a>b){
-        a = b;
-        return true;
-    }
-    return false;
-}
-
 mt19937 mt(now());
 /* [a, b) */
 ll rand(ll a, ll b) {
@@ -55,6 +46,7 @@ pair<int, int> dim1to2(vector<vector<int>> &grid, int n){
 // turn_: 現在のターン数
 class Node {
     int turn;
+    int score = 0;
     vector<vector<int>> grid;
 public:
     Node(int turn_, vector<vector<int>> grid_){
@@ -74,13 +66,16 @@ public:
         turn++;
     }
 
-    vector<int> merge_num(vector<int> nums, char dir){
+    // {merge後の配列, 獲得した点数}を返す
+    pair<vector<int>, int> merge_num(vector<int> nums, char dir){
         int n = nums.size();
+        int score_tmp = 0;
 
         if (dir=='F'){
             for (int i=0; i<n-1; i++){
                 if (nums[i]!=0 && nums[i]==nums[i+1]){
                     nums[i] += nums[i+1];
+                    score_tmp += nums[i];
                     nums[i+1] = 0;
                     i++;
                 }
@@ -89,6 +84,7 @@ public:
             for (int i=n-1; i>0; i--){
                 if (nums[i]!=0 && nums[i]==nums[i-1]){
                     nums[i] += nums[i-1];
+                    score_tmp += nums[i];
                     nums[i-1] = 0;
                     i--;
                 }
@@ -97,6 +93,7 @@ public:
             for (int i=0; i<n-1; i++){
                 if (nums[i]!=0 && nums[i]==nums[i+1]){
                     nums[i] += nums[i+1];
+                    score_tmp += nums[i];
                     nums[i+1] = 0;
                     i++;
                 }
@@ -105,18 +102,22 @@ public:
             for (int i=n-1; i>0; i--){
                 if (nums[i]!=0 && nums[i]==nums[i-1]){
                     nums[i] += nums[i-1];
+                    score_tmp += nums[i];
                     nums[i-1] = 0;
                     i--;
                 }
             }
         }
 
-        return nums;
+        return {nums, score};
     }
 
     // 盤面を傾ける
+    // scoreを更新する
     // dir : FBLR
     void tilt(char dir){
+        int score_tmp = 0;
+
         // 上
         if (dir=='F'){
             rep(i, 0, g_size){
@@ -131,7 +132,9 @@ public:
                 }
 
                 // 数を合成する
-                tmp = merge_num(tmp, dir);
+                int add;
+                tie(tmp, add) = merge_num(tmp, dir);
+                score_tmp += add;
 
                 // 0を除外する
                 vector<int> not_0;
@@ -161,7 +164,9 @@ public:
                 }
 
                 // 数を合成する
-                tmp = merge_num(tmp, dir);
+                int add;
+                tie(tmp, add) = merge_num(tmp, dir);
+                score_tmp += add;
                 
                 // 0を除外する
                 vector<int> not_0;
@@ -191,7 +196,9 @@ public:
                 }
 
                 // 数を合成する
-                tmp = merge_num(tmp, dir);
+                int add;
+                tie(tmp, add) = merge_num(tmp, dir);
+                score_tmp += add;
                 
                 // 0を除外する
                 vector<int> not_0;
@@ -221,7 +228,9 @@ public:
                 }
 
                 // 数を合成する
-                tmp = merge_num(tmp, dir);
+                int add;
+                tie(tmp, add) = merge_num(tmp, dir);
+                score_tmp += add;
                 
                 // 0を除外する
                 vector<int> not_0;
@@ -237,17 +246,12 @@ public:
                 }
             }
         }
+
+        score = score_tmp;
     }
 
     // ルールベースで盤面を評価する
     int evaluate(){
-        int score = 0;
-        // debug
-        for (int i=0; i<g_size; i++){
-            for (int j=0; j<g_size; j++){
-                score += pow(grid[i][j], 2);
-            }
-        }
         return score;
     }
 
@@ -326,7 +330,7 @@ public:
     }
 
     // 貪欲プレイアウトをする
-    // ランダムにキャンディーを置くところから
+    // ランダムに数字をを置くところから
     void playout_greedy(){
 
         rep(t, turn, turn_num){
@@ -346,7 +350,7 @@ public:
             }
             int next_coord = rand(1, cnt_free+1);
 
-            // 盤面にキャンディーを配置する
+            // 盤面に数字を配置する
             vector<int> candy{2, 2, 2, 4};
             int rd = rand(0, candy.size());
             int next_val = candy[rd];
@@ -466,7 +470,7 @@ int main(){
     cout << "input the excepted square and start." << endl;
 
     // 自動で乱択して入力する
-    const bool auto_mode = false;
+    const bool auto_mode = true;
 
     // ターン開始
     rep(turn, 0, turn_num){
@@ -492,7 +496,7 @@ int main(){
             cin >> coord >> val;
         }
 
-        // キャンディーを置く
+        // 数字を置く
         node.input(coord, val);
 
         vector<vector<int>> grid_tmp = node.get_grid();
