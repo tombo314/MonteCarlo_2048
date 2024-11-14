@@ -24,7 +24,7 @@ ll rand(ll a, ll b) {
 // grid coordは1-indexed
 
 const int g_size = 4;
-const int turn_num = 10000;
+const int turn_num = 50000;
 const string dirs = "FBLR";
 
 pair<int, int> dim1to2(vector<vector<int>> &grid, int n){
@@ -109,7 +109,7 @@ public:
             }
         }
 
-        return {nums, score};
+        return {nums, score_tmp};
     }
 
     // 盤面を傾ける
@@ -247,7 +247,7 @@ public:
             }
         }
 
-        score = score_tmp;
+        score += score_tmp;
     }
 
     // ルールベースで盤面を評価する
@@ -385,16 +385,16 @@ public:
     void show_grid(){
         rep(i, 0, g_size){
             rep(j, 0, g_size){
-                cerr << grid[i][j] << " ";
+                cout << grid[i][j] << " ";
             }
-            cerr << endl;
+            cout << endl;
         }
-        cerr << endl;
+        cout << endl;
     }
 };
 
 double get_ucb1(int score, int trial_num, int trial_num_all){
-    const double c = 3000'0000;
+    const double c = 50'000;
     return (double)score/trial_num+c*sqrt(2*log(trial_num_all)/trial_num);
 }
 
@@ -477,8 +477,8 @@ int main(){
 
         int coord, val;
 
+        // 自動でプレイする
         if (auto_mode){
-            // debug
             vector<vector<int>> grid_debug = node.get_grid();
             int cnt_free = 0;
             for (int i=0; i<g_size; i++){
@@ -514,7 +514,7 @@ int main(){
             nodes[i] = node;
             nodes[i].tilt(dirs_tmp[i]);
         }
-
+        
         vector<int> scores(cand_num);
         vector<int> trial_nums(cand_num);
         
@@ -535,13 +535,14 @@ int main(){
 
             // ucb1が最大のノードを選ぶ
             int mx_score = 0;
-            int mx_cand;
+            int mx_cand = -1;
             rep(i, 0, cand_num){
                 double ucb1 = get_ucb1(scores[i], trial_nums[i], max(1, simulation_cnt));
                 if (chmax(mx_score, ucb1)){
                     mx_cand = i;
                 }
             }
+            assert(mx_cand!=-1);
             Node node_selected = nodes[mx_cand];
 
             // 貪欲プレイアウトを行う
@@ -576,7 +577,10 @@ int main(){
         node.tilt(operation);
 
         // 答えを出力する
-        cout << operation << endl;
+        cout << "dir  : " << operation << endl;
+
+        // スコアを出力する
+        cout << "score: " << node.evaluate() << endl;
 
         // 盤面を出力する
         node.show_grid();
@@ -585,12 +589,5 @@ int main(){
 
 /*
 
-スコア計算をルールベースにする
-
-0 0 0 0
-0 0 0 0
-2 2 0 0
-0 0 0 0
-1 2
 
 */
