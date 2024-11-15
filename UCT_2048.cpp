@@ -24,7 +24,7 @@ ll rand(ll a, ll b) {
 // grid coordは1-indexed
 
 const int g_size = 4;
-const int turn_num = 30000;
+const int turn_num = 50000;
 const string dirs = "FBLR";
 
 pair<int, int> dim1to2(vector<vector<int>> &grid, int n){
@@ -374,10 +374,6 @@ public:
 
             // 傾ける
             tilt(dir);
-
-            // // debug
-            // // グリッドを表示する
-            // show_grid();
         }
     }
 
@@ -470,7 +466,7 @@ int main(){
     cout << "input the excepted square and start." << endl;
 
     // 自動で乱択して入力する
-    const bool auto_mode = true;
+    const bool auto_mode = false;
 
     // ターン開始
     rep(turn, 0, turn_num){
@@ -544,7 +540,12 @@ int main(){
                     mx_cand = i;
                 }
             }
-            assert(mx_cand!=-1);
+            // ゲーム終了
+            if (mx_cand==-1){
+                node.show_grid();
+                cout << "Game Over" << endl;
+                return 0;
+            }
             Node node_selected = nodes[mx_cand];
 
             // 貪欲プレイアウトを行う
