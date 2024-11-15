@@ -24,7 +24,7 @@ ll rand(ll a, ll b) {
 // grid coordは1-indexed
 
 const int g_size = 4;
-const int turn_num = 100000;
+const int turn_num = 30000;
 const string dirs = "FBLR";
 
 pair<int, int> dim1to2(vector<vector<int>> &grid, int n){
@@ -470,7 +470,7 @@ int main(){
     cout << "input the excepted square and start." << endl;
 
     // 自動で乱択して入力する
-    const bool auto_mode = false;
+    const bool auto_mode = true;
 
     // ターン開始
     rep(turn, 0, turn_num){
@@ -528,8 +528,8 @@ int main(){
             trial_nums[i]++;
         }
 
-        const int simulation_num = 5000;
-        const int simulation_num_border = 3000;
+        const int simulation_num = 10000;
+        const int simulation_num_border = 5000;
 
         // UCB1に基づいてノードを決定して、
         // モンテカルロシミュレーションを行う
