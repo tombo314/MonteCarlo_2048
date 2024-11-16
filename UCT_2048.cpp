@@ -505,7 +505,7 @@ int main(){
             }
         }
 
-        // ノードを展開する
+        // ノードを1層展開する
         int cand_num = dirs_tmp.size();
         vector<Node> nodes(cand_num, Node{-1, grid_tmp});
         rep(i, 0, cand_num){
