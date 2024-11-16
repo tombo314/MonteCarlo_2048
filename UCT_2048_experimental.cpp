@@ -466,7 +466,7 @@ int main(){
     cout << "input the excepted square and start." << endl;
 
     // 自動で乱択して入力する
-    const bool auto_mode = false;
+    const bool auto_mode = true;
 
     // ターン開始
     rep(turn, 0, turn_num){
@@ -506,11 +506,20 @@ int main(){
         }
 
         // ノードを3層展開する
-        int cand_num = dirs_tmp.size();
+        int dir_num = dirs_tmp.size();
+        int cand_num = pow(dir_num, 3);
         vector<Node> nodes(cand_num, Node{-1, grid_tmp});
-        rep(i, 0, cand_num){
-            nodes[i] = node;
-            nodes[i].tilt(dirs_tmp[i]);
+        int nodes_idx = 0;
+        rep(i, 0, dir_num){
+            for (int j=0; j<dir_num; j++){
+                for (int k=0; k<dir_num; k++){
+                    nodes[nodes_idx] = node;
+                    nodes[nodes_idx].tilt(dirs_tmp[i]);
+                    nodes[nodes_idx].tilt(dirs_tmp[j]);
+                    nodes[nodes_idx].tilt(dirs_tmp[k]);
+                    nodes_idx++;
+                }
+            }
         }
         
         vector<int> scores(cand_num);
