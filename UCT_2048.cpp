@@ -563,12 +563,12 @@ int main(){
             }
         }
 
-        // ucb1が最大の手を選ぶ
+        // 平均スコアが最大の手を選ぶ
         int mx_score = 0;
         int mx_cand;
         rep(i, 0, cand_num){
-            double ucb1 = scores[i]/trial_nums[i];
-            if (chmax(mx_score, ucb1)){
+            double average = scores[i]/trial_nums[i];
+            if (chmax(mx_score, average)){
                 mx_cand = i;
             }
         }
