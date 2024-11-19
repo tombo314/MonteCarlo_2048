@@ -391,7 +391,7 @@ public:
 
 double get_ucb1(int score, int trial_num, int trial_num_all){
     const double c = 70000;
-    return (double)score/trial_num+c*sqrt(2*log(trial_num_all)/trial_num);
+    return (double)score/trial_num + c*sqrt(2*log(trial_num_all)/trial_num);
 }
 
 bool is_valid_dir(vector<vector<int>> &grid, char dir){
