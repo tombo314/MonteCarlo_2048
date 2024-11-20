@@ -3,7 +3,10 @@ using namespace std;
 typedef long long ll;
 #define rep(i, a, b) for (int i=a; i<b; i++)
 #define rrep(i, a, b) for (int i=a; i>b; i--)
-#define now() chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count()
+
+int now(){
+    return chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
+}
 
 template <typename T, typename U>
 bool chmax(T &a, U b){
