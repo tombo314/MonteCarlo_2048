@@ -1,8 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-#define rep(i, a, b) for (int i=a; i<b; i++)
-#define rrep(i, a, b) for (int i=a; i>b; i--)
 
 int now(){
     return chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
@@ -32,8 +30,8 @@ const string dirs = "FBLR";
 
 pair<int, int> dim1to2(vector<vector<int>> &grid, int n){
     int idx = 0;
-    rep(i, 0, g_size){
-        rep(j, 0, g_size){
+    for (int i=0; i<g_size; i++){
+        for (int j=0; j<g_size; j++){
             if (grid[i][j]==0){
                 idx++;
             }
@@ -123,11 +121,11 @@ public:
 
         // 上
         if (dir=='F'){
-            rep(i, 0, g_size){
+            for (int i=0; i<g_size; i++){
 
                 // 0以外を保持する
                 vector<int> tmp;
-                rep(j, 0, g_size){
+                for (int j=0; j<g_size; j++){
                     if (grid[j][i]!=0){
                         tmp.emplace_back(grid[j][i]);
                         grid[j][i] = 0;
@@ -148,18 +146,18 @@ public:
                 }
 
                 // 上に詰める
-                rep(j, 0, not_0.size()){
+                for (int j=0; j<not_0.size(); j++){
                     grid[j][i] = not_0[j];
                 }
             }
         }
         // 下
         else if (dir=='B'){
-            rep(i, 0, g_size){
+            for (int i=0; i<g_size; i++){
 
                 // 0以外を保持する
                 vector<int> tmp;
-                rep(j, 0, g_size){
+                for (int j=0; j<g_size; j++){
                     if (grid[j][i]!=0){
                         tmp.emplace_back(grid[j][i]);
                         grid[j][i] = 0;
@@ -180,18 +178,18 @@ public:
                 }
 
                 // 下に詰める
-                rep(j, 0, not_0.size()){
+                for (int j=0; j<not_0.size(); j++){
                     grid[g_size-1-j][i] = not_0[not_0.size()-1-j];
                 }
             }
         }
         // 左
         else if (dir=='L'){
-            rep(i, 0, g_size){
+            for (int i=0; i<g_size; i++){
 
                 // 0以外を保持する
                 vector<int> tmp;
-                rep(j, 0, g_size){
+                for (int j=0; j<g_size; j++){
                     if (grid[i][j]!=0){
                         tmp.emplace_back(grid[i][j]);
                         grid[i][j] = 0;
@@ -212,18 +210,18 @@ public:
                 }
 
                 // 左に詰める
-                rep(j, 0, not_0.size()){
+                for (int j=0; j<not_0.size(); j++){
                     grid[i][j] = not_0[j];
                 }
             }
         }
         // 右
         else if (dir=='R'){
-            rep(i, 0, g_size){
+            for (int i=0; i<g_size; i++){
 
                 // 0以外を保持する
                 vector<int> tmp;
-                rep(j, 0, g_size){
+                for (int j=0; j<g_size; j++){
                     if (grid[i][j]!=0){
                         tmp.emplace_back(grid[i][j]);
                         grid[i][j] = 0;
@@ -244,7 +242,7 @@ public:
                 }
 
                 // 右に詰める
-                rep(j, 0, not_0.size()){
+                for (int j=0; j<not_0.size(); j++){
                     grid[i][g_size-1-j] = not_0[not_0.size()-1-j];
                 }
             }
@@ -336,11 +334,11 @@ public:
     // ランダムに数字をを置くところから
     void playout_greedy(){
 
-        rep(t, turn, turn_num){
+        for (int t=turn; t<turn_num; t++){
             // 空き座標を数える
             int cnt_free = 0;
-            rep(i, 0, g_size){
-                rep(j, 0, g_size){
+            for (int i=0; i<g_size; i++){
+                for (int j=0; j<g_size; j++){
                     if (grid[i][j]==0){
                         cnt_free++;
                     }
@@ -382,8 +380,8 @@ public:
 
     // 盤面を表示する
     void show_grid(){
-        rep(i, 0, g_size){
-            rep(j, 0, g_size){
+        for (int i=0; i<g_size; i++){
+            for (int j=0; j<g_size; j++){
                 cout << grid[i][j] << " ";
             }
             cout << endl;
@@ -469,10 +467,10 @@ int main(){
     cout << "input the excepted square and start." << endl;
 
     // 自動で乱択して入力する
-    const bool auto_mode = false;
+    const bool auto_mode = true;
 
     // ターン開始
-    rep(turn, 0, turn_num){
+    for (int turn=0; turn<turn_num; turn++){
 
         cout << "turn : " << turn << endl;
 
@@ -511,7 +509,7 @@ int main(){
         // ノードを1層展開する
         int cand_num = dirs_tmp.size();
         vector<Node> nodes(cand_num, Node{-1, grid_tmp});
-        rep(i, 0, cand_num){
+        for (int i=0; i<cand_num; i++){
             nodes[i] = node;
             nodes[i].tilt(dirs_tmp[i]);
         }
@@ -520,7 +518,7 @@ int main(){
         vector<int> trial_nums(cand_num);
         
         // 各ノード1回ずつシミュレーションする
-        rep(i, 0, cand_num){
+        for (int i=0; i<cand_num; i++){
             Node node_selected = nodes[i];
             node_selected.playout_greedy();
             scores[i] += node_selected.evaluate();
@@ -532,12 +530,12 @@ int main(){
 
         // UCB1に基づいてノードを決定して、
         // モンテカルロシミュレーションを行う
-        rep(simulation_cnt, 0, simulation_num){
+        for (int simulation_cnt=0; simulation_cnt<simulation_num; simulation_cnt++){
 
             // ucb1が最大のノードを選ぶ
             int mx_score = 0;
             int mx_cand = -1;
-            rep(i, 0, cand_num){
+            for (int i=0; i<cand_num; i++){
                 double ucb1 = get_ucb1(scores[i], trial_nums[i], max(1, simulation_cnt));
                 if (chmax(mx_score, ucb1)){
                     mx_cand = i;
@@ -569,7 +567,7 @@ int main(){
         // 平均スコアが最大の手を選ぶ
         int mx_score = 0;
         int mx_cand;
-        rep(i, 0, cand_num){
+        for (int i=0; i<cand_num; i++){
             double average = scores[i]/trial_nums[i];
             if (chmax(mx_score, average)){
                 mx_cand = i;
